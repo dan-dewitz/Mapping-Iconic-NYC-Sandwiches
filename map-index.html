@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="transfav.png">
+    <title>Google Maps with Bootstrap Modal</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD6l3Xi5xro-wAXep-M1Lw8tcmTFPTF7Fs&callback=initMap" async defer></script>
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-light bg-white fixed-top">
+        <span class="navbar-brand mb-0 h1 mx-auto text-dark">Iconic NYC Sandwiches</span>
+    </nav>
+    <footer class="navbar navbar-light bg-white fixed-bottom">
+        <span class="navbar-brand mb-0 h5 mx-auto text-dark" style="font-size: 12px;">Open Data Week | Daniel DeWitz</span>
+    </footer>
+
+    <div id="map"></div>
+
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header w-100 d-flex flex-column align-items-center">
+                    <h5 id="restaurantName" class="text-center"></h5>
+                    <h3 id="sandwichName" class="font-weight-bold mb-1 text-center"></h3>
+                    <h5 id="sandwichPrice" class="mt-2 text-center"></h5>
+                    <button type="button" class="close position-absolute" style="right: 15px; top: 15px;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <img id="sandwichImage" src="" alt="Sandwich" class="img-fluid mx-auto d-block">
+                    <p id="sandwichText" class="mt-3 text-left"></p>                   
+                    
+                    <p id="restaurantWebsite" class="mb-0 text-center"></p>          
+                    <p id="restaurantLocation" class="mt-1 mb-1 text-center"></p>
+                    <p id="getDirections" class="text-center mt-0"></p>         
+                    
+                     
+                    
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-dark btn-block w-75" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: { lat: 40.712776, lng: -74.005974 } // Centered around New York, NY
+            });
+
+            var locations = 
+
+            [{'name': 'C&B',
+  'lat': 40.7251413,
+  'lng': -73.98165569999999,
+  'img': './processed_images/image_1.png',
+  'location': '178 East Seventh Street (Avenue B)',
+  'sandwich': 'Chorizo egg sandwich',
+  'price': 13,
+  'text': 'Many people wouldn’t guess that C & B, by the looks of it, serves some of the finest sandwiches in the city. Ali Sahin’s tiny cafe has been located for nearly a decade on the south side of Tompkins Square Park in the East Village, serving breakfast sandwiches that exemplify why New Yorkers love breakfast sandwiches: they’re simple as can be, but every component is on point. Lining up for a weekend breakfast sandwich there feels a little like being at a model casting — one wonders if the name is a play on “see and be seen” — but ordering well is a great equalizer: a fat, rich chorizo patty straight off the griddle and wobbly scrambled eggs, all piled high on an housemade roll to soak up the sausage’s spiced fat. BECKY HUGHES',
+  'website': 'candbnyc.com'},
+ {'name': 'Radio Bakery',
+  'lat': 40.7323915,
+  'lng': -73.9550678,
+  'img': 'https://static01.nytimes.com/newsgraphics/2024-05-21-sandwich/_images/onlyny7-@@-300.webp',
+  'location': '135 India Street (Manhattan Avenue)',
+  'sandwich': 'Smoked salmon sandwich',
+  'price': 15,
+  'text': 'New York is no stranger to smoked salmon — we’re practically aswim in lox — but it usually arrives in sandwich form on a bagel. Not so at the popular Radio Bakery in Greenpoint, where the pastry chef Kelly Mencin serves smoked salmon with a schmear of whipped cream cheese seasoned with pickled red onions and dill, all sandwiched between airy, crispy, everything-seasoned focaccia The bread recipe was perfected by Rafiq Salim, a partner here and a Gramercy Tavern vet, but the idea to serve it in this inventive, satisfying form is all Ms. Mencin’s. On weekends, the sandwich tends to sell out well before 11 a.m., but hopefully that won’t be an issue when a second Radio Bakery opens in Prospect Heights later this year. NIKITA RICHARDSON',
+  'website': 'radiobakery.nyc'}]
+
+            ;
+
+            locations.forEach(function (loc) {
+                var marker = new google.maps.Marker({
+                    position: { lat: loc.lat, lng: loc.lng },
+                    map: map,
+                    title: loc.name,
+                    icon: {
+                        url: loc.img, // Use the sandwich image as the marker icon
+                        scaledSize: new google.maps.Size(90, 54), // Adjust marker size
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(25, 25) // Adjust anchor point
+                    }
+                });
+
+                marker.addListener('click', function () {
+                    document.getElementById('restaurantName').textContent = loc.name;
+                    document.getElementById('sandwichImage').src = loc.img;
+                    document.getElementById('restaurantLocation').textContent = loc.location;
+                    document.getElementById('sandwichName').textContent = loc.sandwich;
+                    document.getElementById('sandwichPrice').textContent = '$' + loc.price;
+                    document.getElementById('sandwichText').textContent = loc.text;
+                    document.getElementById('restaurantWebsite').href = loc.website;
+                    document.getElementById('restaurantWebsite').innerHTML = `<a href="https://${loc.website}" target="_blank" class="text-secondary">${loc.website}</a>`;
+                    document.getElementById('getDirections').innerHTML = `
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}" 
+                        target="_blank"
+                        class="text-secondary">
+                            get directions
+                        </a>
+                    `;
+
+
+                    $('#infoModal').modal('show');
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>
