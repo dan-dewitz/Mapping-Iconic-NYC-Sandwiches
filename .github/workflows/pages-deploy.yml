@@ -3,19 +3,23 @@ name: Deploy GitHub Pages
 on:
   push:
     branches:
-      - main  # Adjust if you use a different branch for deployment
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # Adjust if your index.html is in the root directory
-          cname: www.iconicsandwiches.com  # Replace with your custom domain
+    - name: Setup Git
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./  # Adjust if your index.html is in the root directory
+        cname: www.iconicsandwiches.com  # Replace with your custom domain
