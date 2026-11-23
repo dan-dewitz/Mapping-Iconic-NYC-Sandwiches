@@ -6,7 +6,6 @@
     <link rel="icon" type="image/png" href="myflav.webp">
     <title>Iconic NYC Sandwiches</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxcv3VHkIqFTav6sdaj8WO0ixiBGJeO0U&callback=initMap" async defer></script>
     <style>
         #map {
             height: 100vh;
@@ -1018,6 +1017,8 @@
             });
         }
     </script>
+    <!-- Load Maps after initMap is defined so the callback can't fire too early -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxcv3VHkIqFTav6sdaj8WO0ixiBGJeO0U&callback=initMap&loading=async" async defer></script>
 
 </body>
 </html>
